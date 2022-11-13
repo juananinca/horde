@@ -1,5 +1,5 @@
-const execa = require("execa");
-const fs = require("fs");
+import { execa } from "execa"
+import * as fs from 'fs';
 (async () => {
   try {
     await execa("git", ["checkout", "--orphan", "gh-pages"]);
@@ -18,7 +18,9 @@ const fs = require("fs");
     console.log("Successfully deployed, check your settings");
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.log(e.message);
-    process.exit(1);
+    if (e instanceof Error) {
+        console.log(e.message);
+        process.exit(1);
+    }
   }
 })();
