@@ -1,19 +1,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { v4 as uuidv4 } from 'uuid';
 import { Creature } from '../models/Creature'
 import { horde } from '../models/Horde'
+import { Logger } from '../models/Logger'
 
 export default defineComponent({
   data() {
     return {
       message: '',
+      logger: new Logger(),
       beastOptions: horde,
       beastOptionsValue: new Creature("", []),
       groupDamage: "",
       numberOfCreatures: -1,
       enemyCa: -1,
-      uuid: uuidv4(),
       numberOfCreaturesOptions: [
         {value: -1, text: "Numero de Criaturas", disabled: true},
         1, 2, 3, 4, 5, 6, 7, 8
@@ -30,12 +30,13 @@ export default defineComponent({
         alert("Alguno de los campos obligatorios esta vacio!!")
         return
       }
-      console.log(`---------Group ${this.uuid}----------------------`)
+      this.logger.text = ''
+      this.logger.text += `---------Group-----------\n`
       let numberOfCreaturesNumber : number = +this.numberOfCreatures
       let enemyCaNumber : number = +this.enemyCa
       let totalDamage : number = 0
       for (let index = 0; index < numberOfCreaturesNumber; index++) {
-        totalDamage += this.beastOptionsValue.attack(enemyCaNumber)  
+        totalDamage += this.beastOptionsValue.attack(enemyCaNumber, this.logger)  
       }
       this.groupDamage = totalDamage.toString()
     }
@@ -63,7 +64,20 @@ export default defineComponent({
       <hr/>
       <b-form-row>
         <b-col><b-button @click="rollGroup">Roll!</b-button></b-col>
-        <b-col><b-button v-if="groupDamage !== ''" variant="primary">{{groupDamage}}</b-button></b-col>
+        <b-col class="text-center"><b-button v-if="groupDamage !== ''" variant="primary" v-b-toggle.collapse-1>{{groupDamage}}</b-button></b-col>
+        <!-- <b-col class="text-center"><b-button v-if="groupDamage !== ''" variant="primary" v-b-modal.modal-1>{{groupDamage}}</b-button></b-col> -->
+      </b-form-row>
+      <b-form-row>
+        <b-collapse id="collapse-1" class="mt-2">
+          <b-card>
+            <b-form-textarea
+              id="textarea"
+              v-model="logger.text"
+              plaintext
+              rows="10"
+            ></b-form-textarea>
+          </b-card>
+        </b-collapse>
       </b-form-row>
     </b-card>
   </div>

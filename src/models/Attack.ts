@@ -1,3 +1,5 @@
+import type { Logger } from './Logger'
+
 export class Attack {
     name: string;
     attackBonus: number;
@@ -14,26 +16,26 @@ export class Attack {
       this.damageDice = dd
     }
 
-    rollAttack(enemyCa : number): number {
+    rollAttack(enemyCa : number, logger: Logger): number {
         let attackRoll: number = this.generateRandomValue(1, 20)
         let damage : number = 0
-        console.log(`Ataca con ${this.name} un ${attackRoll} + ${this.attackBonus} cuando la CA del enemigo es de ${enemyCa}`)
+        logger.text += `Ataca con ${this.name} \n Att:(${attackRoll}+${this.attackBonus}) ${attackRoll + this.attackBonus}, CA: ${enemyCa}\n`
         if ( (attackRoll + this.attackBonus)  >= enemyCa ) {
-            damage = this.rollDamage(attackRoll === 20)
+            damage = this.rollDamage(attackRoll === 20, logger)
         }
         return damage
     }
 
-    rollDamage(critical: boolean = false): number {
+    rollDamage(critical: boolean = false, logger: Logger): number {
         let totalDiceToRoll: number = critical ? this.numberDamageDice * 2 : this.numberDamageDice;
         let currentDamage : number = 0
-        console.log(`Hace un daño de: `)
+        logger.text += `Hace un daño de: \n`
         for (let index = 0; index < totalDiceToRoll; index++) {
             let damage : number = this.generateRandomValue(1, this.damageDice)
-            console.log(damage)
+            logger.text += `${damage}\n`
             currentDamage += damage
         }
-        console.log(`Hace un total de daño de: ${currentDamage} + ${this.damageBonus}`)
+        logger.text += `Total de daño: (${currentDamage}+${this.damageBonus}) ${currentDamage+this.damageBonus}\n`
         return currentDamage + this.damageBonus
     }
 
