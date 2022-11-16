@@ -14,6 +14,7 @@ export default defineComponent({
       groupDamage: "",
       numberOfCreatures: -1,
       enemyCa: -1,
+      visible: false,
       numberOfCreaturesOptions: [
         {value: -1, text: "Numero de Criaturas", disabled: true},
         1, 2, 3, 4, 5, 6, 7, 8
@@ -64,11 +65,11 @@ export default defineComponent({
       <hr/>
       <b-form-row>
         <b-col><b-button @click="rollGroup">Roll!</b-button></b-col>
-        <b-col class="text-center"><b-button v-if="groupDamage !== ''" variant="primary" v-b-toggle.collapse-1>{{groupDamage}}</b-button></b-col>
+        <b-col class="text-center"><b-button v-if="groupDamage !== ''" variant="primary" @click="visible = !visible">{{groupDamage}}</b-button></b-col>
         <!-- <b-col class="text-center"><b-button v-if="groupDamage !== ''" variant="primary" v-b-modal.modal-1>{{groupDamage}}</b-button></b-col> -->
       </b-form-row>
       <b-form-row>
-        <b-collapse id="collapse-1" class="mt-2">
+        <b-collapse id="collapse-1" v-model="visible" class="mt-2">
           <b-card>
             <b-form-textarea
               id="textarea"
