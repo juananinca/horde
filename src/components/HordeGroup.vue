@@ -10,7 +10,7 @@ export default defineComponent({
       message: '',
       logger: new Logger(),
       beastOptions: horde,
-      beastOptionsValue: new Creature("", []),
+      beastOptionsValue: horde[0],
       groupDamage: "",
       numberOfCreatures: -1,
       enemyCa: -1,
@@ -52,7 +52,7 @@ export default defineComponent({
           id="horde-group-beast-selector"
           class="mb-2 mr-sm-2 mb-sm-0"
           v-model="beastOptionsValue">
-            <option :value="beastOptionsValue" disabled>Selecciona una bestia</option>
+            <option disabled>Selecciona una bestia</option>
             <option v-for="option in beastOptions" :value="option">
               {{ option.name }}
             </option>
